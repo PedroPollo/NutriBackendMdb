@@ -5,6 +5,7 @@ const config = require('./config');
 const inv = require('./modules/inv/rutas');
 const enc = require('./modules/enc/rutas');
 const auth = require('./modules/auth/rutas');
+const encuestas = require('./modules/encuestas/rutas');
 const error = require('./net/errors');
 
 const app = express();
@@ -21,6 +22,7 @@ app.set('port', config.app.port);
 app.use('/api/auth', auth);
 app.use('/api/enc', enc);
 app.use('/api/inv', inv);
+app.use('/api/encuestas', encuestas);
 
 //Errores personalizados
 app.use(error);

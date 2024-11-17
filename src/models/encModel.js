@@ -22,6 +22,6 @@ const encSchema = new mongoose.Schema({
     }
 }, { versionKey: false });
 
-const Encuestador = mongoose.model('Encuestador',encSchema);
+const Encuestador = mongoose.model('encuestadors',encSchema);
 
 module.exports = Encuestador;

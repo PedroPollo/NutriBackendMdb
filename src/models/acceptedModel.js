@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const acceptSchema = new mongoose.Schema({
     id_investigador: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Investigador',
+        ref: 'investigadors',
         required: true,
     },
     id_encuestador: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Encuestador',
+        ref: 'encuestadors',
         required: true,
     },
     validador: {
@@ -17,6 +17,6 @@ const acceptSchema = new mongoose.Schema({
     }
 }, { versionKey: false });
 
-const isAccepted = mongoose.model('isAccepted', acceptSchema);
+const isAccepted = mongoose.model('isaccepteds', acceptSchema);
 
 module.exports = isAccepted;

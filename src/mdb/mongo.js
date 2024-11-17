@@ -41,6 +41,8 @@ connectToMongoDB();
 const Investigador = require('../models/invModel');
 const Encuestador = require('../models/encModel');
 const Validador = require('../models/acceptedModel');
+const Encuestas = require('../models/encuestas');
+const EncuestasAp = require('../models/respuestas');
 
 //Funciones CRUD
 async function all(Modelo) {
@@ -115,4 +117,6 @@ module.exports = {
     Encuestador,
     Investigador,
     Validador,
+    Encuestas,
+    EncuestasAp,
 };

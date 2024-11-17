@@ -7,5 +7,5 @@ const invSchema = new mongoose.Schema({
     }
 }, { versionKey: false });
 
-const Investigador = mongoose.model('Investigador', invSchema);
+const Investigador = mongoose.model('investigadors', invSchema);
 module.exports = Investigador;
