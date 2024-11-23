@@ -15,8 +15,9 @@ module.exports = function(dbinyectada) {
         const consulta = {
             autor: body.id_investigador
         }
-        console.log(consulta)
-        return await querys.query(querys.Encuestas, consulta)
+        const result = await querys.query(querys.Encuestas, consulta)
+        console.log(result)
+        return result
     }
 
     async function load(body) {
