@@ -30,7 +30,7 @@ async function all (req, res, next) {
 async function add (req, res, next) {
     try {
         const all = await controller.add(req.body);
-        responses.success(req, res, message, 200);
+        responses.success(req, res, "Se registro correctamente", 200);
     } catch (error) {
         next(error)
     }
