@@ -13,11 +13,15 @@ module.exports = function(dbinyectada) {
 
     async function encuestas(body) {
         const consulta = {
-            autor: body.id_investigador
+            autor: { $in: body.investigadores } // Usamos $in para múltiples IDs
+        };
+    
+        try {
+            const result = await querys.query(querys.Encuestas, consulta);
+            return result;
+        } catch (error) {
+            throw new Error(`Error al consultar encuestas: ${error.message}`);
         }
-        const result = await querys.query(querys.Encuestas, consulta)
-        console.log(result)
-        return result
     }
 
     async function load(body) {
