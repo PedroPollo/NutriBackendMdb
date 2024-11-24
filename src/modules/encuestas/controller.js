@@ -3,6 +3,7 @@ const auth = require('../../auth');
 const querys = require('../../mdb/mongo');
 const controller = require('../auth/index');
 const mongoose = require('mongoose');
+const moment = require('moment'); // Asegúrate de instalar moment.js
 
 module.exports = function(dbinyectada) {
     let db = dbinyectada;
@@ -26,12 +27,21 @@ module.exports = function(dbinyectada) {
 
     async function load(body) {
         try {
+            
+            if (typeof body === 'string') {
+                body = JSON.parse(body);
+            }
             // Desestructura el array de encuestas desde `body.data`
             const encuestas = body.data;
     
             // Procesa cada encuesta de manera asincrónica
             const respuestas = await Promise.all(
                 encuestas.map(async (encuesta) => {
+                    // Verifica y convierte `fecha_aplicacion` si está en formato DD-MM-YYYY
+                    if (typeof encuesta.fecha_aplicacion === 'string') {
+                        encuesta.fecha_aplicacion = moment(encuesta.fecha_aplicacion, "DD-MM-YYYY").toDate();
+                    }
+    
                     // Inserta cada encuesta en la base de datos
                     return await querys.add(querys.EncuestasAp, encuesta);
                 })
@@ -43,7 +53,6 @@ module.exports = function(dbinyectada) {
             throw error; // Lanza el error si ocurre alguno
         }
     }
-    
 
     return{
         encuestas,
