@@ -15,7 +15,7 @@ const preguntaSchema = new mongoose.Schema({
         type: [String],
         default: []
     },
-}, { versionKey: false });
+});
 
 const EncuestasSchema = new mongoose.Schema({
     nombre: {
