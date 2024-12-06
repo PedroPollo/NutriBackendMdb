@@ -242,6 +242,28 @@ async function cargarEncuestas() {
         alert('Error al cargar las encuestas');
     }
 }
+cargarEncuestas();
+async function eliminarEncuesta(id) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta encuesta?')) {
+        try {
+            const response = await fetch(`http://localhost:3002/api/encuestas_new/eliminarEncuesta/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                alert('Encuesta eliminada con éxito');
+                // Actualizar la lista de encuestas
+                cargarEncuestas();
+            } else {
+                const error = await response.json();
+                alert('Error al eliminar la encuesta: ' + error.message);
+            }
+        } catch (error) {
+            console.error('Error al eliminar encuesta:', error);
+            alert('Ocurrió un error al eliminar la encuesta.');
+        }
+    }
+}
 
 function renderizarEncuestas(encuestas) {
     const tbody = document.querySelector('#example2 tbody');
@@ -271,13 +293,19 @@ function renderizarEncuestas(encuestas) {
 
         const botonEditar = document.createElement('button');
         botonEditar.textContent = 'Editar';
-        botonEditar.classList.add('btn', 'btn-warning');
+        botonEditar.classList.add('btn', 'btn-warning', 'mr-2');
         botonEditar.onclick = () => {
             editarEncuesta(encuesta._id);
         };
+        const botonEliminar = document.createElement('button');
+        botonEliminar.textContent = 'Eliminar';
+        botonEliminar.classList.add('btn', 'btn-danger', 'mr-2');
+        botonEliminar.onclick = () => eliminarEncuesta(encuesta._id);
+        
 
         celdaOpciones.appendChild(botonVer);
         celdaOpciones.appendChild(botonEditar);
+        celdaOpciones.appendChild(botonEliminar);
         fila.appendChild(celdaOpciones);
 
         tbody.appendChild(fila);

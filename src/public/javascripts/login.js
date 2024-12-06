@@ -1,4 +1,3 @@
-
 document.getElementById('loginForm').addEventListener('submit', function (event) {
     event.preventDefault(); // Evita el envío tradicional del formulario
 
@@ -28,17 +27,20 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            if(correo_ins=="a@gmail.com"){//--Aquí se specifica el correo del admin--
+            // Manejar caso para admin
+            if (correo_ins === "a@gmail.com") { // Aquí se especifica el correo del admin
                 localStorage.setItem('token', data.token);
                 window.location.href = 'inicio_admin.html';
-            }else{
-                // Guardar el token en localStorage o sessionStorage
+            } else {
+                // Guardar el token en localStorage y redirigir
                 localStorage.setItem('token', data.token);
-                window.location.href = 'inicio.html'; // Redireccionar a la página protegida
+                window.location.href = 'inicio.html';
             }
-            
+        } else if (data.redirect) {
+            // Redirigir a la sala de espera si se recibe la propiedad redirect
+            window.location.href = data.redirect;
         } else {
-            // Mostrar mensaje de error si la contraseña es incorrecta
+            // Mostrar mensaje de error si hay otro problema
             document.getElementById('conmal').style.display = 'block';
         }
     })

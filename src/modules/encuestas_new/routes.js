@@ -5,5 +5,5 @@ router.get('/obtener-encuestas', obtenerEncuestas);
 router.post('/crearEncuesta',crearEncuesta);
 router.get('/obtenerEncuesta',obtenerEncuesta);
 router.put('/actualizarEncuesta',actualizarEncuesta);
-router.put('/eliminarEncuesta',eliminarEncuesta)
+router.delete('/eliminarEncuesta/:id',eliminarEncuesta)
 module.exports = router;

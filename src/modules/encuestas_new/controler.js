@@ -51,8 +51,11 @@ const actualizarEncuesta = async (req, res) => {
 
 const eliminarEncuesta = async (req, res) => {
     try {
-        const encuestaEliminada = await Encuesta.findByIdAndDelete(req.params.id);
-        if (!encuestaEliminada) return res.status(404).json({ message: 'Encuesta no encontrada' });
+        const { id } = req.params;
+        const encuestaEliminada = await Encuesta.findByIdAndDelete(id);
+        if (!encuestaEliminada) {
+            return res.status(404).json({ message: 'Encuesta no encontrada' });
+        }
         res.json({ message: 'Encuesta eliminada con éxito' });
     } catch (error) {
         console.error('Error al eliminar encuesta:', error);

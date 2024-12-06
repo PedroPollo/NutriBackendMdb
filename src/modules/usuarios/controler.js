@@ -45,6 +45,15 @@ const iniciarSesion = async (req, res) => {
             return res.json({ success: false, message: 'Usuario no encontrado.' });
         }
 
+        // Verificar si el usuario ha sido aceptado
+        if (!usuario.aceptado) {
+            return res.json({ 
+                success: false, 
+                message: 'Usuario no aceptado.', 
+                redirect: './saladeespera.html' // Enviar una indicación para redirigir
+            });
+        }
+
         // Comparar la contraseña ingresada con la contraseña hasheada
         const isMatch = await bcrypt.compare(contr, usuario.contr);
         if (!isMatch) {
