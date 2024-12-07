@@ -79,12 +79,13 @@ async function add(Modelo, data) {
     }
 }
 
-function del(Modelo, id) {
-    return new Promise((resolve, reject) => {
-        Modelo.findByIdAndRemove(id, (error, result) => {
-            return error ? reject(error) : resolve(result);
-        });
-    });
+async function del(Modelo, id) {
+    try {
+        const del = await Modelo.findByIdAndDelete(id);
+        return del === null ? 500: 200
+    } catch (error) {
+        throw error;
+    }
 }
 
 // Cambiar la función query para usar async/await en lugar de callbacks
@@ -100,7 +101,7 @@ async function queryOne(Modelo, consulta) {
 async function query(Modelo, consulta) {
     try {
         const result = await Modelo.find(consulta);  // Usar await para esperar la promesa
-        return result;
+        return result === null ? 'No se pudo aceptar al encuestador' : 'Se agrego al encuestador correctamente';
     } catch (error) {
         throw error;  // Lanza el error para ser manejado en el controlador
     }

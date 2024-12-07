@@ -45,8 +45,8 @@ module.exports = function(dbinyectada) {
     }
 
     async function actualizar_estados(req) {
-        const { id } = req.params;
-        const { aceptado } = rq.body
+        const { id } = req.params.id;
+        const { aceptado } = req.body
 
         if (aceptado) {
             await querys.actualizar(querys.Investigador, id, {aceptado: true})
@@ -57,11 +57,64 @@ module.exports = function(dbinyectada) {
         }
     }
 
+    async function encuestadores(req) {
+        try {
+            consulta = {
+                id_investigador: req.params.id,
+                validador: false
+            }
+            const resp = await querys.query(querys.Validador, consulta)
+            const ids = [...new Set(resp.map(validador => validador.id_encuestador))];
+            consulta = {
+                _id: { $in: ids }
+            }
+            const encuestadores = await querys.query(querys.Encuestador, consulta);
+            console.log(resp);
+            console.log(encuestadores);
+
+            const resultado = resp.map(item => {
+                const encuestador = encuestadores.find(enc => enc._id.equals(item.id_encuestador)); // Comparar ObjectId
+                if (encuestador) {
+                    return {
+                    _id: item._id,
+                    matricula: encuestador.matricula,
+                    nombre: encuestador.nombre
+                    };
+                }
+                return null; // Si no hay coincidencia, devolver null (puedes manejar esto como prefieras)
+              }).filter(item => item !== null); // Eliminar nulos si los hay
+            
+            console.log(resultado);
+            
+            return resultado;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function aceptarEncuestador(body) {
+        try {
+            const { validador } = body
+            console.log(validador)
+            if (validador) {
+                await querys.actualizar(querys.Validador, body.id, {validador: true});
+                return 'Encuestador agergado correctamente';
+            } else {
+                await querys.del(querys.Validador, body.id)
+                return 'Se elimino al encuestador'
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
     return {
         registrarUsuario,
         iniciarSesion,
         pendientes,
         actualizar_estados,
+        encuestadores,
+        aceptarEncuestador,
     }
 
 }

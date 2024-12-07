@@ -12,6 +12,8 @@ router.post('/registro', registrarUsuario); // Asegura que el método está bien
 router.post('/login', iniciarSesion);
 router.get('/pendientes', pendientes);
 router.put('/actualizar-estado/:id', actualizar_estado);
+router.get('/encuestadores/:id', encuestadores);
+router.put('/aceptar-encuestadores', aceptarEnc);
 
 router.get('/ruta-protegida', verificarToken, (req, res) => {
     res.json({
@@ -20,6 +22,24 @@ router.get('/ruta-protegida', verificarToken, (req, res) => {
         usuario: req.usuario // Esto devuelve la información decodificada del token
     });
 });
+
+async function encuestadores(req, res, next) {
+    try {
+        const response = await controller.encuestadores(req)
+        responses.success(req, res, response, 200)
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function aceptarEnc(req, res, next) {
+    try {
+        const result = await controller.aceptarEncuestador(req.body)
+        responses.success(req, res, result, 200);
+    } catch (error) {
+        next(error);
+    }
+}
 
 async function registrarUsuario(req, res, next) {
     try {
