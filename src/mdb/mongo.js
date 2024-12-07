@@ -38,11 +38,11 @@ mongoose.connection.on('disconnected', () => {
 connectToMongoDB();
 
 //Importamos modelos
-const Investigador = require('../models/invModel');
 const Encuestador = require('../models/encModel');
 const Validador = require('../models/acceptedModel');
-const Encuestas = require('../models/encuestas');
+const Encuestas = require('../models/encuesta_new');
 const EncuestasAp = require('../models/respuestas');
+const Usuario = require('../models/Usuario');
 
 //Funciones CRUD
 async function all(Modelo) {
@@ -125,7 +125,7 @@ module.exports = {
     queryOne,
     actualizar,
     Encuestador,
-    Investigador,
+    Usuario,
     Validador,
     Encuestas,
     EncuestasAp,

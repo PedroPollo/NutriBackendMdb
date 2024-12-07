@@ -1,0 +1,139 @@
+<!-- 
+Nombre del programa: register.html
+Descripción: Este documento muestra el formato del registro de un nuevo usuario
+--> 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registrar usuario</title>
+  <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../../AdminLTE-master/plugins/fontawesome-free/css/all.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="../../../AdminLTE-master/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../../AdminLTE-master/dist/css/adminlte.min.css">
+
+</head>
+<body class="hold-transition login-page" style="background:linear-gradient(0deg, rgba(255, 206, 0, 0.8), rgba(0, 68, 136, 0.8));">
+<div class="register-box">
+  
+
+  <div class="card">
+    <div class="card-body register-card-body">
+      <br>
+      <form id="registroForm">
+        <div class="register-logo">
+          <img src="./images/logo.png" alt="H & GT Logo" width="50%" height="50%"  style="opacity: .8">
+        </div>
+        <br>
+        
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Nombre(s)" name="nom_usuario" required>
+          <div class="input-group-append">
+              <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+              </div>
+          </div>
+      </div>
+  
+      <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Apellidos" name="apellidos_usuario" required>
+          <div class="input-group-append">
+              <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+              </div>
+          </div>
+      </div>
+  
+      <div class="input-group mb-3">
+          <input type="text" minlength="6" maxlength="6" class="form-control" placeholder="Identificador" name="identificador" required>
+          <div class="input-group-append">
+              <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+              </div>
+          </div>
+      </div>
+  
+      <div class="input-group mb-3">
+          <input type="email" class="form-control" placeholder="Correo Institucional" name="correo_ins" required>
+          <div class="input-group-append">
+              <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+              </div>
+          </div>
+      </div>
+  
+      <div class="input-group mb-3">
+          <input type="email" class="form-control" placeholder="Correo Alternativo" name="correo_alter">
+          <div class="input-group-append">
+              <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+              </div>
+          </div>
+      </div>
+  
+      <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Contraseña" name="contr" required>
+          <div class="input-group-append">
+              <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+              </div>
+          </div>
+      </div>
+  
+      <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Confirme su contraseña" name="contr_2" required>
+          <div class="input-group-append">
+              <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+              </div>
+          </div>
+      </div>
+  
+      <div class="row">
+          <div class="col-8">
+              <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+          </div>
+      </div>
+
+        <br>
+          <div id="error-message1" name="error-message" style="display:none;color:red;">
+            Campos incompletos. Por favor, inténtalo de nuevo.
+          </div>
+          <div id="numrep" name="error-message" style="display:none;color:red;">
+            Este número de empleado ya se encuentra registrado, favor de iniciar sesión.
+          </div>
+          <div id="condif" name="error-message" style="display:none;color:red;">
+           Los numeros de empleado no coniciden, favor de verificar.
+          </div>
+          <div id="error-message2" name="error-message" style="display:none;color:red;">
+            Las contraseñas son diferentes. Por favor, inténtalo de nuevo.
+          </div>
+          <div id="good" name="error-message" style="display:none;color:rgb(31, 173, 31);">
+            Usuario registrado correctamente
+          </div>
+      </form>
+<br>
+      <a  style="color:#0D47A1" href="index.html" class="text-center">¿Ya tienes una cuenta?<b> Iniciar sesión</b> </a>
+    </div>
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+<!-- jQuery -->
+
+
+<script src="./javascripts/registro.js"></script>
+<!-- <script src="../modules/inv/index.js"></script> -->
+<!-- <script src="../dist/bundle.js"></script> -->
+
+</body>
+</html>
