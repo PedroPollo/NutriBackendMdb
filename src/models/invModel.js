@@ -12,14 +12,17 @@ const invSchema = new mongoose.Schema({
     identificador: {
         type: String,
         required: true,
+        unique: true,
     },
     correo_ins: {
         type: String,
         required: true,
+        unique: true
     },
     correo_alter: {
         type: String,
         required: true,
+        unique: true
     },
     contr: {
         type: String,

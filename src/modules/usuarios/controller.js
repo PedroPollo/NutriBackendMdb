@@ -11,17 +11,21 @@ module.exports = function(dbinyectada) {
     }
 
     async function registrarUsuario(body) {
-        const authData = {
-            nom_usuario: body.nom_usuario,
-            apellidos_usuario: body.apellidos_usuario,
-            identificador: body.identificador,
-            correo_ins: body.correo_ins,
-            correo_alter: body.correo_alter,
+        try {
+            const authData = {
+                nom_usuario: body.nom_usuario,
+                apellidos_usuario: body.apellidos_usuario,
+                identificador: body.identificador,
+                correo_ins: body.correo_ins,
+                correo_alter: body.correo_alter,
+            }
+            if (body.contr) {
+                authData.contr = await bcrypt.hash(body.contr.toString(), 5);
+            }
+            return querys.add(querys.Investigador, authData);
+        } catch (e) {
+            throw e;
         }
-        if (body.contr) {
-            authData.contr = await bcrypt.hash(body.password.toString(), 5);
-        }
-        return querys.add(querys.Investigador, authData);
     }
 
     async function iniciarSesion(correo_ins, contr) {

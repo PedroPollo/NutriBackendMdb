@@ -47,12 +47,7 @@ async function registrarUsuario(req, res, next) {
             return responses.error(req, res, 'Las contraseñas no coinciden', 500)
         }
         const all = await controller.registrarUsuario(req.body);
-        if (req.body.id == 0) {
-            message = 'Item succesfully aded';
-        } else {
-            message = 'Item succesfully updated';
-        }
-        responses.success(req, res, message, 201);
+        responses.success(req, res, 'Usuario creado exitosamente', 200);
     } catch (error) {
         next(error);
     }
