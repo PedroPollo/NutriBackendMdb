@@ -6,6 +6,7 @@ const inv = require('./modules/inv/rutas');
 const enc = require('./modules/enc/rutas');
 const auth = require('./modules/auth/rutas');
 const encuestas = require('./modules/encuestas/rutas');
+const usuarios = require('./modules/usuarios/rutas');
 const error = require('./net/errors');
 
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/auth', auth);
 app.use('/api/enc', enc);
 app.use('/api/inv', inv);
 app.use('/api/encuestas', encuestas);
+app.use('/api/usuarios', usuarios);
 
 //Errores personalizados
 app.use(error);

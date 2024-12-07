@@ -106,6 +106,15 @@ async function query(Modelo, consulta) {
     }
 }
 
+async function actualizar(Modelo, id, consulta) {
+    try {
+        const result = await Modelo.findByIdAndUpdate(id, consulta);
+        return result
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     mongoose,
     all,
@@ -114,6 +123,7 @@ module.exports = {
     del,
     query,
     queryOne,
+    actualizar,
     Encuestador,
     Investigador,
     Validador,

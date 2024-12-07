@@ -5,13 +5,13 @@ module.exports = function(dbinyectada) {
     let db = dbinyectada
 
     if (!db) {
-        db = require('../../DB/mysql');
+        db = require('../../mdb/mongo');
     }
 
     async function all() {
         try {
             // Reemplaza cualquier callback con await para la consulta
-            const results = await querys.Investigador.find(); // Ahora devuelve una promesa y se espera el resultado
+            const results = await querys.Investigador.find({}, { _id: 1, nom_usuario: 1, apellidos_usuario: 1 }); // Ahora devuelve una promesa y se espera el resultado
             if (!results || results.length === 0) {
                 throw new Error('No records found');
             }
