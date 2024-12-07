@@ -1,4 +1,4 @@
 const db = require('../../mdb/mongo');
-const ctrl = require('./controler');
+const ctrl = require('./controller');
 
 module.exports = ctrl(db);
