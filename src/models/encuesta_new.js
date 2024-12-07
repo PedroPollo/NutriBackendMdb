@@ -20,6 +20,12 @@ const encuestaSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    autor: {
+        type: mongoose.Schema.Types.ObjectId, // Relación con el modelo Usuario
+        ref: 'Usuario',
+        required: true,
+    },
 });
+
 
 module.exports = mongoose.model('Encuesta', encuestaSchema);

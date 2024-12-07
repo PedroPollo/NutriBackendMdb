@@ -192,7 +192,7 @@ function guardarEncuesta() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify(encuesta)
     })
@@ -200,6 +200,7 @@ function guardarEncuesta() {
             if (response.ok) {
                 alert('Encuesta guardada exitosamente');
                 // Opcional: redirigir o limpiar el formulario
+                cargarEncuestas();
             } else {
                 response.json().then(data => {
                     alert(`Error: ${data.message || 'No se pudo guardar la encuesta'}`);
