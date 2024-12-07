@@ -35,8 +35,12 @@ const EncuestasSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'investigadors',
         required: true
+    },
+    fechaCreacion: {
+        type: Date,
+        required:true
     }
-}, { versionKey: false });
+});
 
 const Encuestador = mongoose.model('encuestas', EncuestasSchema)
 

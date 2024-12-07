@@ -14,7 +14,7 @@ module.exports = function(dbinyectada) {
 
     async function encuestas(body) {
         const consulta = {
-            autor: { $in: body.investigadores } // Usamos $in para múltiples IDs
+            autor: { $in: body.investigadores }// Usamos $in para múltiples IDs
         };
     
         try {
@@ -54,8 +54,24 @@ module.exports = function(dbinyectada) {
         }
     }
 
+    async function crear(body) {
+        try {
+            const fechaActual = new Date();
+
+            // Convertir a ISO con ajuste de zona horaria
+            const fechaISO = new Date(fechaActual.getTime() - fechaActual.getTimezoneOffset() * 60000).toISOString();
+
+            // Reemplazar el formato para incluir la zona horaria
+            body.fechaCreacion = `${fechaISO.slice(0, -1)}+00:00`;
+            return await querys.add(querys.Encuestas, body);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     return{
         encuestas,
         load,
+        crear,
     }
 }
