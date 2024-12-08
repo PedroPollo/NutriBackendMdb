@@ -98,7 +98,47 @@ const actualizar_estado = async (req, res) => {
         res.status(500).json({ message: 'Error al actualizar el estado del usuario.' });
     }
 };
+
+const isAccepted = require('../../models/acceptedModel');
+const pendientes_encuestadores = async (req, res) => {
+    const investigadorId =  req.investigadorId;
+    console.log("El id del token es:",investigadorId);
+    try {
+    
+        const encuestadoresPendientes = await isAccepted.find({ id_investigador: investigadorId, validador: false })
+            .populate('id_investigador', 'nom_usuario') // Opcional
+            .populate('id_encuestador', 'nombre matricula'); // Opcional
+            console.log(encuestadoresPendientes); 
+        res.json(encuestadoresPendientes);
+
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener encuestadores pendientes' });
+    }
+};
+
+// Actualizar el estado de un encuestador
+const actualizar_estado_encuestadores = async (req, res) => {
+    const { id } = req.params;
+    const { aceptado } = req.body; // true para aceptar, false para rechazar
+
+    try {
+        if (aceptado) {
+            // Actualiza el estado a validado
+            await isAccepted.findByIdAndUpdate(id, { validador: true });
+            res.json({ message: 'Encuestador aceptado con éxito.' });
+        } else {
+            // Elimina el registro si se rechaza
+            await isAccepted.findByIdAndDelete(id);
+            res.json({ message: 'Encuestador rechazado y eliminado con éxito.' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error al actualizar el estado del encuestador.' });
+    }
+};
+
 module.exports = { 
+    pendientes_encuestadores,
+    actualizar_estado_encuestadores,
     registrarUsuario, 
     iniciarSesion,
     pendientes,

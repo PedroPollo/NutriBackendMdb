@@ -2,7 +2,7 @@ const express = require('express');
 
 const responses = require('../../net/responses');
 const controller = require('./index');
-
+;
 const router = express.Router();
 
 router.get('/', all);

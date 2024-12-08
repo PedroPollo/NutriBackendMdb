@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const acceptSchema = new mongoose.Schema({
     id_investigador: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'investigadors',
+        ref: 'Usuario',
         required: true,
     },
     id_encuestador: {

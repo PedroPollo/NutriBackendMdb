@@ -16,6 +16,7 @@ function verificarToken(req, res, next) {
     try {
         const decoded = jwt.verify(token, 'nutricion_UAZ');
         req.usuario = decoded; // Asigna los datos decodificados a `req.usuario`
+        req.investigadorId = decoded.id;
         next();
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
