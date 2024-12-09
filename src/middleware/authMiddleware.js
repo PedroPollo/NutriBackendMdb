@@ -2,18 +2,27 @@
 const jwt = require('jsonwebtoken'); // Supongamos que usas JWT
 
 function verificarToken(req, res, next) {
-    const token = req.headers['authorization']; // Obtén el token del encabezado
-    if (!token) {
+    const authHeader = req.headers['authorization'];
+    console.log('Encabezado Authorization:', req.headers['authorization']);
+    if (!authHeader) {
         return res.status(401).json({ message: 'Token no proporcionado' });
     }
 
+    // Soporta formatos con y sin "Bearer"
+    const token = authHeader.startsWith('Bearer ')
+        ? authHeader.split(' ')[1] // Extrae el token después de "Bearer"
+        : authHeader; // Toma directamente el token si no tiene "Bearer"
+        console.log('Token recibido:', token);
     try {
-        // Verifica el token con la clave secreta
-        const decoded = jwt.verify(token, 'nutricion_UAZ'); 
-        req.usuario = decoded; // Guarda los datos decodificados en la solicitud
-        next(); // Continúa hacia la ruta protegida
+        const decoded = jwt.verify(token, 'nutricion_UAZ');
+        req.usuario = decoded; // Asigna los datos decodificados a `req.usuario`
+        req.investigadorId = decoded.id;
+        next();
     } catch (error) {
-        return res.status(403).json({ message: 'Token inválido o expirado' });
+        if (error.name === 'TokenExpiredError') {
+            return res.status(403).json({ message: 'Token expirado' });
+        }
+        return res.status(403).json({ message: 'Token inválido' });
     }
 }
 
