@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { obtenerEncuestas, eliminarEncuesta, obtenerEncuesta, actualizarEncuesta, crearEncuesta } = require('./controler');
-const verificarToken = require('../../middleware/authMiddelware');
+const verificarToken = require('../../middleware/authMiddleware');
 router.get('/obtener-encuestas', verificarToken, obtenerEncuestas);
 router.post('/crearEncuesta',verificarToken ,crearEncuesta);
 router.get('/obtenerEncuesta',obtenerEncuesta);
