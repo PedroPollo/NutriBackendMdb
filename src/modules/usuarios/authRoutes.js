@@ -1,4 +1,5 @@
 
+
 const express = require('express');
 const router = express.Router();
 const { registrarUsuario, iniciarSesion, pendientes, actualizar_estado, pendientes_encuestadores, actualizar_estado_encuestadores } = require('./controler'); // Asegúrate de que sea 'controller.js' o que esté correcto
