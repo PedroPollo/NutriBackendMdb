@@ -9,7 +9,7 @@ const enc = require('./modules/enc/rutas');
 const auth = require('./modules/auth/rutas');
 const usuarios = require('./modules/usuarios/authRoutes');
 const encuestas = require('./modules/encuestas/rutas');
-const encuestas_new = require('./modules/encuestas_new/routes');
+const encuestas_new = require('./modules/encuestaas_new/routes');
 const error = require('./net/errors');
 const path = require('path');
 
