@@ -9,7 +9,7 @@ document.getElementById('registroForm').addEventListener('submit', function (eve
     const data = Object.fromEntries(formData.entries());
 
     // Enviar los datos al backend
-    fetch('http://localhost:3002/api/usuarios/registro', { // Asegúrate de que coincida con la ruta backend
+    fetch('https://4z0r6nts-3002.usw3.devtunnels.ms/api/usuarios/registro', { // Asegúrate de que coincida con la ruta backend
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

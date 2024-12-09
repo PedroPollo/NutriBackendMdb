@@ -1,7 +1,7 @@
 // Cargar encuestadores pendientes al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:3002/api/usuarios/pendientes-encuestadores')
+    fetch('https://4z0r6nts-3002.usw3.devtunnels.ms/api/usuarios/pendientes-encuestadores')
         .then(response => response.json())
         .then(encuestadores => {
             const tbody = document.getElementById('encuestadores-pendientes');
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        const response = await fetch('http://localhost:3002/api/usuarios/pendientes-encuestadores', {
+        const response = await fetch('https://4z0r6nts-3002.usw3.devtunnels.ms/api/usuarios/pendientes-encuestadores', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -59,19 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
             tbody.appendChild(row);
         });
-        // encuestadores.forEach(encuestador => {
-        //     const row = document.createElement('tr');
-        //     row.innerHTML = `
-        //         <td>${encuestador.id_encuestador.nombre}</td>
-        //         <td>${encuestador.id_encuestador.email}</td>
-        //         <td>${encuestador.validador ? 'Validado' : 'Pendiente'}</td>
-        //         <td>
-        //             <button class="btn btn-success" onclick="actualizarEstado('${encuestador._id}', true)">Aceptar</button>
-        //             <button class="btn btn-danger" onclick="actualizarEstado('${encuestador._id}', false)">Rechazar</button>
-        //         </td>
-        //     `;
-        //     tbody.appendChild(row);
-        // });
+
     } catch (error) {
         console.error('Error:', error);
         alert('Error al cargar los encuestadores pendientes.');
@@ -81,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Actualizar el estado del encuestador
 function actualizarEstado(id, aceptado) {
-    fetch(`http://localhost:3002/api/usuarios/actualizar-estado-encuestadores/${id}`, {
+    fetch(`https://4z0r6nts-3002.usw3.devtunnels.ms/api/usuarios/actualizar-estado-encuestadores/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ aceptado })

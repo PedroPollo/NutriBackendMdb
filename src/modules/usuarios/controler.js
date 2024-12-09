@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const Usuario = require('../../models/Usuario'); // Importa el modelo Usuario
+const Usuario = require('../../models/invModel'); // Importa el modelo Usuario
 
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'nutricion_UAZ';

@@ -188,7 +188,7 @@ function guardarEncuesta() {
         return;
     }
 
-    fetch('http://localhost:3002/api/encuestas_new/crearEncuesta', {
+    fetch('https://4z0r6nts-3002.usw3.devtunnels.ms/api/encuestas_new/crearEncuesta', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -225,7 +225,7 @@ async function cargarEncuestas() {
             return;
         }
 
-        const response = await fetch('http://localhost:3002/api/encuestas_new/obtener-encuestas', {
+        const response = await fetch('https://4z0r6nts-3002.usw3.devtunnels.ms/api/encuestas_new/obtener-encuestas', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -247,7 +247,7 @@ cargarEncuestas();
 async function eliminarEncuesta(id) {
     if (confirm('¿Estás seguro de que deseas eliminar esta encuesta?')) {
         try {
-            const response = await fetch(`http://localhost:3002/api/encuestas_new/eliminarEncuesta/${id}`, {
+            const response = await fetch(`https://4z0r6nts-3002.usw3.devtunnels.ms/api/encuestas_new/eliminarEncuesta/${id}`, {
                 method: 'DELETE'
             });
 

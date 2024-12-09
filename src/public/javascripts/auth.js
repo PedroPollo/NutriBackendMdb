@@ -10,7 +10,7 @@ function verificarAutenticacion() {
     }
 
     // Opcional: Verificar el token en el servidor
-    fetch('http://localhost:3002/api/usuarios/ruta-protegida', {
+    fetch('https://4z0r6nts-3002.usw3.devtunnels.ms/api/usuarios/ruta-protegida', {
         method: 'GET',
         headers: {
             'Authorization': token

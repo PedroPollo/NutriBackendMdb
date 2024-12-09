@@ -17,7 +17,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
     }
 
     // Realizar la petición al servidor para el inicio de sesión
-    fetch('http://localhost:3002/api/usuarios/login', {
+    fetch('https://4z0r6nts-3002.usw3.devtunnels.ms/api/usuarios/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

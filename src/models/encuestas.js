@@ -1,41 +1,32 @@
 const mongoose = require('mongoose');
 
-//Definicion del esquema
-const preguntaSchema = new mongoose.Schema({
-    text: {
-        type: String,
-        required: true
-    },
-    tipo: {
-        type: String,
-        enum: ['abierta', 'opcion-multiple'],
-        required: true
-    },
-    opciones: {
-        type: [String],
-        default: []
-    },
-}, { versionKey: false });
-
 const EncuestasSchema = new mongoose.Schema({
     nombre: {
         type: String,
-        required: true
+        required: true,
     },
     descripcion: {
         type: String,
-        required: true
+        required: true,
     },
-    preguntas: {
-        type: [preguntaSchema], // Un array de objetos pregunta
-        required: true
+    preguntas: [
+        {
+            tipo: String,
+            texto: String,
+            opciones: [String],
+        }
+    ],
+    fechaCreacion: {
+        type: Date,
+        default: Date.now,
     },
     autor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'investigadors',
-        required: true
-    }
-}, { versionKey: false });
+        type: mongoose.Schema.Types.ObjectId, // Relación con el modelo Usuario
+        ref: 'Usuario',
+        required: true,
+    },
+});
+
 
 const Encuestador = mongoose.model('encuestas', EncuestasSchema)
 

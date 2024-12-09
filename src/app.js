@@ -10,11 +10,19 @@ const usuarios = require('./modules/usuarios/authRoutes');
 const encuestas = require('./modules/encuestas/rutas');
 const encuestas_new = require('./modules/encuestas_new/routes');
 const error = require('./net/errors');
+const path = require('path');
+
 
 const app = express();
 
 // Habilitar CORS
 app.use(cors()); // Aquí se habilita CORS para todas las solicitudes
+
+// Configuración de la carpeta estática
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // Middleware
 app.use(morgan('dev'));

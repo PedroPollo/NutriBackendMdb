@@ -1,6 +1,6 @@
 // Cargar usuarios pendientes al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('http://localhost:3002/api/usuarios/pendientes')
+    fetch('https://4z0r6nts-3002.usw3.devtunnels.ms/api/usuarios/pendientes')
         .then(response => response.json())
         .then(usuarios => {
             const tbody = document.getElementById('usuarios-pendientes');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function actualizarEstado(id, aceptado) {
-    fetch(`http://localhost:3002/api/usuarios/actualizar-estado/${id}`, {
+    fetch(`https://4z0r6nts-3002.usw3.devtunnels.ms/api/usuarios/actualizar-estado/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ aceptado })

@@ -17,6 +17,5 @@ router.get('/ruta-protegida', verificarToken, (req, res) => {
         usuario: req.usuario // Esto devuelve la información decodificada del token
     });
 });
-// router.post('/', usuarios); 
 
 module.exports = router;
