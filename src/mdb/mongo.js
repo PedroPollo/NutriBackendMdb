@@ -107,6 +107,15 @@ async function query(Modelo, consulta) {
     }
 }
 
+async function query2(Modelo, consulta) {
+    try {
+        const result = await Modelo.find(consulta);  // Usar await para esperar la promesa
+        return result
+    } catch (error) {
+        throw error;  // Lanza el error para ser manejado en el controlador
+    }
+}
+
 async function actualizar(Modelo, id, consulta) {
     try {
         const result = await Modelo.findByIdAndUpdate(id, consulta);
@@ -125,6 +134,7 @@ module.exports = {
     query,
     queryOne,
     actualizar,
+    query2,
     Encuestador,
     Investigador,
     Validador,

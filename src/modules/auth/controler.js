@@ -55,7 +55,7 @@ module.exports = function(dbinyectada) {
         const id = data._id.toString();
         
         // Consulta los validadores relacionados
-        const cons = await querys.query(querys.Validador, { id_encuestador: id, validador: true });
+        const cons = await querys.query2(querys.Validador, { id_encuestador: id, validador: true });
     
         // Determina si el usuario está aceptado
         var accepted = false;
