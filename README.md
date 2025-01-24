@@ -12,7 +12,7 @@ NutriPoblacional es un proyecto diseñado para la unidad academica de nutricion 
 
 1. Clona el repositorio en tu máquina local:
    ```bash
-   git clone <>
+   git clone https://github.com/PedroPollo/NutriBackendMdb.git
 
 2. Accede a la carpeta del proyecto:
     ```bash
