@@ -36,13 +36,27 @@ NutriPoblacional es un proyecto diseñado para la unidad academica de nutricion 
     ```bash
     npm install
 
-4. Ejecuta el servidor:
+4. Configura las variables de entorno:
+    Crea un archivo ``` .env``` en la raiz del proyecto con los siguientes valores:
+    ```
+    PORT = <Puerto en el que alojara la pagina web y la API>
+    MONGODB = <URL de la base datos>/nutri
+    ````
+    Si la base datos esta en el mismo servidor se suele usar el siguiente dato:
+    ````
+    PORT = <Puerto en el que alojara la pagina web y la API>
+    MONGODB = mongodb://localhost:27017/nutri
+    ````
+
+
+5. Ejecuta el servidor:
     ```bash
     npm run dev
 
 ## Requisitos previos
-- Node.js: V22.11.0
-- MongoDB: v(.0.4)
+- Node.js: v22.11.0
+- MongoDB: v8.0.4
+- Git: Ultima version disponible
 
 ## Contacto
 Si tienes preguntas o necesitas soporte, puedes contactarnosa través de pedroaguila4322@gmail.com
