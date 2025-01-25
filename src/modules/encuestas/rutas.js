@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/', encuestas);
 router.post('/loadresp', load);
-router.get('/respuestas/:id', respuestas);
+router.get('/resultados/:id', respuestas);
 router.post('/crear', crear);
 router.get('/obtener-encuestas', obtenerEncuestas);
 router.get('/obtenerEncuesta/:id',obtenerEncuesta);

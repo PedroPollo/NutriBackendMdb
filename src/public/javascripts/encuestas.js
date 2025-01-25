@@ -286,10 +286,8 @@ function renderizarEncuestas(encuestas) {
         const botonVer = document.createElement('button');
         botonVer.textContent = 'Ver';
         botonVer.classList.add('btn', 'btn-primary', 'mr-2');
-        botonVer.setAttribute('data-toggle', 'modal');
-        botonVer.setAttribute('data-target', '#modal_ver_form');
         botonVer.onclick = () => {
-            verEncuesta(encuesta._id);
+            window.location.href = `/resultados/${encuesta._id}`;
         };
 
         const botonEditar = document.createElement('button');
