@@ -10,6 +10,7 @@ const auth = require('./modules/auth/rutas');
 const usuarios = require('./modules/usuarios/authRoutes');
 const encuestas = require('./modules/encuestas/rutas');
 const encuestas_new = require('./modules/encuestaas_new/routes');
+const respuestas= require('./modules/encuestaas_new/routes');
 const error = require('./net/errors');
 const path = require('path');
 
@@ -19,6 +20,9 @@ const app = express();
 // Habilitar CORS
 app.use(cors()); // Aquí se habilita CORS para todas las solicitudes
 
+app.get('/resultados/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/resultados.html')); // Ajusta la ruta según la ubicación del archivo
+});
 // Configuración de la carpeta estática
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
@@ -39,7 +43,8 @@ app.use('/api/enc', enc);
 app.use('/api/inv', inv);
 app.use('/api/encuestas', encuestas);
 app.use('/api/usuarios', usuarios);
-app.use('/api/encuestas_new',encuestas_new)
+app.use('/api/encuestas_new',encuestas_new);
+app.use('/api/respuestas',respuestas);
 
 // Errores personalizados
 app.use(error);

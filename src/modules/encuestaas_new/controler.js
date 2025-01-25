@@ -74,6 +74,7 @@ const eliminarEncuesta = async (req, res) => {
     }
 };
 
+
 module.exports = {
     obtenerEncuestas,
     crearEncuesta,
