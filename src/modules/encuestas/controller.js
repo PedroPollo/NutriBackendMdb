@@ -18,7 +18,7 @@ module.exports = function(dbinyectada) {
         };
     
         try {
-            const result = await querys.query(querys.Encuestas, consulta);
+            const result = await querys.query2(querys.Encuestas, consulta);
             return result;
         } catch (error) {
             throw new Error(`Error al consultar encuestas: ${error.message}`);
@@ -74,7 +74,7 @@ module.exports = function(dbinyectada) {
             consulta = {
                 autor: body.usuario
             }
-            return await querys.query(querys.Encuestas, consulta);
+            return await querys.query2(querys.Encuestas, consulta);
         } catch (error) {
             throw error;
         }
@@ -115,7 +115,7 @@ module.exports = function(dbinyectada) {
                 id_encuesta: req.params.id
             }
             console.log(consulta)
-            const respuestas = await querys.query(querys.EncuestasAp, consulta);
+            const respuestas = await querys.query2(querys.EncuestasAp, consulta);
             return respuestas
         } catch (error) {
             throw error;
