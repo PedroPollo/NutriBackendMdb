@@ -209,6 +209,8 @@ function guardarEncuesta() {
                 alert('Encuesta guardada exitosamente');
                 // Opcional: redirigir o limpiar el formulario
                 cargarEncuestas();
+                reiniciarModal()
+                
             } else {
                 response.json().then(data => {
                     alert(`Error: ${data.message || 'No se pudo guardar la encuesta'}`);
@@ -348,6 +350,7 @@ async function editarEncuesta(idEncuesta) {
             const preguntaDiv = document.getElementById(`pregunta-${preguntaId}`);
             preguntaDiv.querySelector('input[type="text"]').value = pregunta.texto;
             preguntaDiv.querySelector('.tipo-pregunta').value = pregunta.tipo;
+            preguntaDiv.querySelector('.tipo-pregunta').disabled = true;
 
             if (pregunta.tipo === 'opcion-multiple') {
                 const opcionesContainer = preguntaDiv.querySelector('.opciones-container');
