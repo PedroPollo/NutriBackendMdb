@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Actualizar el estado del encuestador
 function actualizarEstado(id, aceptado) {
-    fetch(`https://4z0r6nts-3002.usw3.devtunnels.ms/api/usuarios/actualizar-estado-encuestadores/${id}`, {
+    fetch(`/api/usuarios/actualizar-estado-encuestadores/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ aceptado })
