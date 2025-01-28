@@ -1,6 +1,6 @@
 // Cargar usuarios pendientes al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('http://148.204.142.3:3002/api/usuarios/pendientes')
+    fetch('/api/usuarios/pendientes')
         .then(response => response.json())
         .then(usuarios => {
             const tbody = document.getElementById('usuarios-pendientes');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function actualizarEstado(id, aceptado) {
-    fetch(`http://148.204.142.3:3002/api/usuarios/actualizar-estado/${id}`, {
+    fetch(`/api/usuarios/actualizar-estado/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ aceptado })

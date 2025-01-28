@@ -49,14 +49,28 @@ const obtenerEncuesta = async (req, res) => {
     }
 };
 
-const actualizarEncuesta = async (req, res) => {
+async function actualizarEncuesta(req, res) {
     try {
-        const encuestaActualizada = await Encuesta.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!encuestaActualizada) return res.status(404).json({ message: 'Encuesta no encontrada' });
-        res.json(encuestaActualizada);
+        const encuestaId = req.params.id; // Obtener el ID de la encuesta desde los parámetros
+        const datosActualizados = req.body; // Obtener los datos actualizados desde el cuerpo de la solicitud
+
+        // Buscar la encuesta por ID y actualizarla
+        const encuestaActualizada = await Encuesta.findByIdAndUpdate(encuestaId, datosActualizados, {
+            new: true, // Devuelve el documento actualizado
+            runValidators: true, // Ejecuta las validaciones del modelo
+        });
+
+        if (!encuestaActualizada) {
+            return res.status(404).json({ message: 'Encuesta no encontrada.' });
+        }
+
+        res.json({
+            message: 'Encuesta actualizada correctamente.',
+            encuesta: encuestaActualizada,
+        });
     } catch (error) {
-        console.error('Error al actualizar encuesta:', error);
-        res.status(500).json({ message: 'Ocurrió un error al actualizar la encuesta' });
+        console.error('Error al actualizar la encuesta:', error);
+        res.status(500).json({ message: 'Error al actualizar la encuesta.', error });
     }
 };
 
@@ -74,6 +88,36 @@ const eliminarEncuesta = async (req, res) => {
     }
 };
 
+async function obtenerEncuestaPorId(req, res) {
+    try {
+        const idEncuesta = req.params.id;
+
+        // Buscar la encuesta por su ID
+        const encuesta = await Encuesta.findById(idEncuesta);
+
+        if (!encuesta) {
+            return res.status(404).json({ message: 'Encuesta no encontrada' });
+        }
+
+        // Estructura del objeto a devolver
+        const encuestaConFormato = {
+            id: encuesta._id,
+            nombre: encuesta.nombre,
+            descripcion: encuesta.descripcion,
+            preguntas: encuesta.preguntas.map(pregunta => ({
+                texto: pregunta.texto,
+                tipo: pregunta.tipo,
+                opciones: pregunta.tipo === 'opcion-multiple' ? pregunta.opciones : [],
+            })),
+        };
+
+        // Devolver la encuesta en formato JSON
+        res.json(encuestaConFormato);
+    } catch (error) {
+        console.error('Error al obtener la encuesta:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
 
 module.exports = {
     obtenerEncuestas,
@@ -81,4 +125,5 @@ module.exports = {
     obtenerEncuesta,
     actualizarEncuesta,
     eliminarEncuesta,
+    obtenerEncuestaPorId
 };

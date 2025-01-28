@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken'); // Supongamos que usas JWT
 
 function verificarToken(req, res, next) {
     const authHeader = req.headers['authorization'];
-    console.log('Encabezado Authorization:', req.headers['authorization']);
     if (!authHeader) {
         return res.status(401).json({ message: 'Token no proporcionado' });
     }
@@ -12,7 +11,6 @@ function verificarToken(req, res, next) {
     const token = authHeader.startsWith('Bearer ')
         ? authHeader.split(' ')[1] // Extrae el token después de "Bearer"
         : authHeader; // Toma directamente el token si no tiene "Bearer"
-        console.log('Token recibido:', token);
     try {
         const decoded = jwt.verify(token, 'nutricion_UAZ');
         req.usuario = decoded; // Asigna los datos decodificados a `req.usuario`

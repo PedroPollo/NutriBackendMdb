@@ -10,7 +10,7 @@ function verificarAutenticacion() {
     }
 
     // Opcional: Verificar el token en el servidor
-    fetch('http://148.204.142.3:3002/api/usuarios/ruta-protegida', {
+    fetch('/api/usuarios/ruta-protegida', {
         method: 'GET',
         headers: {
             'Authorization': token
@@ -29,6 +29,50 @@ function verificarAutenticacion() {
         window.location.href = './index.html';
     });
 }
+function cargarNombreUsuario() {
+    const token = localStorage.getItem('token'); // Recupera el token del almacenamiento
 
-// Llama a la función cuando el DOM esté cargado
-document.addEventListener('DOMContentLoaded', verificarAutenticacion);
+    if (!token) {
+        console.error('Token no encontrado. Redirigiendo al login...');
+        window.location.href = './index.html'; // Redirige al login si no hay token
+        return;
+    }
+
+    // Realiza la solicitud a la ruta protegida
+    fetch('/api/usuarios/ruta-protegida', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}` // Incluye el token en el encabezado de autorización
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se pudo acceder a la ruta protegida.');
+            }
+            return response.json(); // Convierte la respuesta en JSON
+        })
+        .then(data => {
+            if (data.nombre_usuario) {
+                // Usa el nombre del usuario en la interfaz
+                const nombreUsuarioDiv = document.getElementById('nom_empleado');
+                if (nombreUsuarioDiv) {
+                    nombreUsuarioDiv.textContent = data.nombre_usuario; // Muestra el nombre del usuario
+                }
+            } else {
+                console.warn('No se recibió el nombre del usuario.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al cargar el nombre del usuario:', error);
+            alert('Hubo un problema al cargar los datos del usuario. Intenta iniciar sesión nuevamente.');
+            localStorage.removeItem('token'); // Borra el token en caso de error
+            window.location.href = './index.html'; // Redirige al login
+        });
+}
+
+// Llama a la función después de verificar la autenticación
+document.addEventListener('DOMContentLoaded', () => {
+    verificarAutenticacion();
+    cargarNombreUsuario();
+});
+

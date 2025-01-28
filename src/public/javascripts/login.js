@@ -17,7 +17,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
     }
 
     // Realizar la petición al servidor para el inicio de sesión
-    fetch('http://148.204.142.3:3002/api/usuarios/login', {
+    fetch('/api/usuarios/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -9,7 +9,7 @@ document.getElementById('registroForm').addEventListener('submit', function (eve
     const data = Object.fromEntries(formData.entries());
 
     // Enviar los datos al backend
-    fetch('http://148.204.142.3:3002/api/usuarios/registro', { // Asegúrate de que coincida con la ruta backend
+    fetch('/api/usuarios/registro', { // Asegúrate de que coincida con la ruta backend
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -20,6 +20,7 @@ document.getElementById('registroForm').addEventListener('submit', function (eve
     .then(result => {
         if (result.success) {
             alert('Registro exitoso');
+            window.location.href = './saladeespera.html';
         } else {
             alert('Error en el registro: ' + result.message);
         }

@@ -1,14 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { obtenerEncuestas, eliminarEncuesta, obtenerEncuesta, actualizarEncuesta, crearEncuesta } = require('./controler');
+const { obtenerEncuestas, eliminarEncuesta, obtenerEncuesta, actualizarEncuesta, crearEncuesta,obtenerEncuestaPorId } = require('./controler');
 const verificarToken = require('../../middleware/authMiddelware');
 router.get('/obtener-encuestas', verificarToken, obtenerEncuestas);
 router.post('/crearEncuesta',verificarToken ,crearEncuesta);
 router.get('/obtenerEncuesta',obtenerEncuesta);
-router.put('/actualizarEncuesta',actualizarEncuesta);
-router.delete('/eliminarEncuesta/:id',eliminarEncuesta)
-const EncuestaAplicada = require('../../models/respuestas')
-const Encuesta = require('../../models/encuestas')
+router.put('/actualizarEncuesta/:id',actualizarEncuesta);
+router.get('/editar/:id', obtenerEncuestaPorId);
+
+router.delete('/eliminarEncuesta/:id',eliminarEncuesta);
+const EncuestaAplicada = require('../../models/respuestas');
+const Encuesta = require('../../models/encuestas');
 router.get('/:id', verificarToken, async (req, res) => {
     try {
         const { id } = req.params;
