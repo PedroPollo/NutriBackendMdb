@@ -102,13 +102,11 @@ const actualizar_estado = async (req, res) => {
 const isAccepted = require('../../models/acceptedModel');
 const pendientes_encuestadores = async (req, res) => {
     const investigadorId =  req.investigadorId;
-    console.log("El id del token es:",investigadorId);
     try {
     
         const encuestadoresPendientes = await isAccepted.find({ id_investigador: investigadorId, validador: false })
             .populate('id_investigador', 'nom_usuario') // Opcional
             .populate('id_encuestador', 'nombre matricula'); // Opcional
-            console.log(encuestadoresPendientes); 
         res.json(encuestadoresPendientes);
 
     } catch (error) {
@@ -135,6 +133,23 @@ const actualizar_estado_encuestadores = async (req, res) => {
         res.status(500).json({ message: 'Error al actualizar el estado del encuestador.' });
     }
 };
+const ruta_protegida = async (req, res) => {
+    try {
+        const correo_ins = req.usuario.correo; // Extrae el correo del usuario autenticado
+        const usuario_all = await Usuario.findOne({ correo_ins }); // Busca el usuario en la base de datos
+
+        if (!usuario_all) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        // Retorna el nombre de usuario al frontend
+        res.json({ nombre_usuario: usuario_all.nom_usuario });
+    } catch (error) {
+        console.error('Error al obtener el nombre de usuario:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
 
 module.exports = { 
     pendientes_encuestadores,
@@ -142,5 +157,6 @@ module.exports = {
     registrarUsuario, 
     iniciarSesion,
     pendientes,
-    actualizar_estado
+    actualizar_estado,
+    ruta_protegida
  };

@@ -1,7 +1,7 @@
 // Cargar encuestadores pendientes al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
-    fetch('http://148.204.142.3:3002/api/usuarios/pendientes-encuestadores')
+    fetch('/api/usuarios/pendientes-encuestadores')
         .then(response => response.json())
         .then(encuestadores => {
             const tbody = document.getElementById('encuestadores-pendientes');
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        const response = await fetch('http://148.204.142.3:3002/api/usuarios/pendientes-encuestadores', {
+        const response = await fetch('/api/usuarios/pendientes-encuestadores', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Actualizar el estado del encuestador
 function actualizarEstado(id, aceptado) {
-    fetch(`http://148.204.142.3:3002/api/usuarios/actualizar-estado-encuestadores/${id}`, {
+    fetch(`https://4z0r6nts-3002.usw3.devtunnels.ms/api/usuarios/actualizar-estado-encuestadores/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ aceptado })

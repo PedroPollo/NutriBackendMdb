@@ -47,7 +47,7 @@
           <img src="./images/user.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <div style="color:#FFFFFF" id="num_empleado"></div>
+          <div style="color:#FFFFFF" id="nom_empleado"></div>
         </div>
       </div>
 
@@ -157,7 +157,7 @@
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Nueva encuesta</h4>
+              <h4 class="modal-title" id="titulo_modal">Nueva encuesta</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -184,10 +184,11 @@
             
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal" id="cancelarBtn">Cancelar</button>
               <button type="button" class="btn btn-primary" data-dismiss="modal" id="guardarEncuestaButton">Guardar</button>
+              <button type="button" class="btn btn-success" id="guardar-cambios_ed" style="display:none">Guardar Cambios</button>
             </div>
-          </div>
+          </div>         
           <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->

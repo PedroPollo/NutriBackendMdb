@@ -100,24 +100,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Función para agregar un nuevo inciso
   function agregarInciso(preguntaId) {
-      const incisosContainer = document.getElementById(`incisos-container-${preguntaId}`);
-      const incisoCount = incisosContainer.getElementsByClassName('form-group').length + 1;
+    const incisosContainer = document.getElementById(`incisos-container-${preguntaId}`);
+    
+    // Si no existe el contenedor, lanzar un error controlado o crearlo
+    if (!incisosContainer) {
+        console.error(`Contenedor de incisos no encontrado para pregunta ID ${preguntaId}`);
+        return;
+    }
 
-      const nuevoInciso = document.createElement('div');
-      nuevoInciso.classList.add('form-group', 'inciso');
-      nuevoInciso.innerHTML = `
-          <label>Opción ${incisoCount}</label>
-          <input type="text" class="form-control" placeholder="Escribe la opción">
-          <button type="button" class="btn btn-danger btn-sm mt-1 eliminar-inciso">Eliminar</button>
-      `;
+    const incisoCount = incisosContainer.getElementsByClassName('form-group').length + 1;
 
-      incisosContainer.appendChild(nuevoInciso);
+    const nuevoInciso = document.createElement('div');
+    nuevoInciso.classList.add('form-group', 'inciso');
+    nuevoInciso.innerHTML = `
+        <label>Opción ${incisoCount}</label>
+        <input type="text" class="form-control" placeholder="Escribe la opción">
+        <button type="button" class="btn btn-danger btn-sm mt-1 eliminar-inciso">Eliminar</button>
+    `;
 
-      // Agregar evento para eliminar inciso
-      nuevoInciso.querySelector('.eliminar-inciso').addEventListener('click', function () {
-          eliminarInciso(nuevoInciso.querySelector('.eliminar-inciso'));
-      });
-  }
+    incisosContainer.appendChild(nuevoInciso);
+
+    // Agregar evento para eliminar inciso
+    nuevoInciso.querySelector('.eliminar-inciso').addEventListener('click', function () {
+        eliminarInciso(nuevoInciso.querySelector('.eliminar-inciso'));
+    });
+}
+
 
   // Función para eliminar una pregunta
   function eliminarPregunta(preguntaId) {
@@ -188,7 +196,7 @@ function guardarEncuesta() {
         return;
     }
 
-    fetch('http://148.204.142.3:3002/api/encuestas_new/crearEncuesta', {
+    fetch('/api/encuestas_new/crearEncuesta', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -225,7 +233,7 @@ async function cargarEncuestas() {
             return;
         }
 
-        const response = await fetch('http://148.204.142.3:3002/api/encuestas_new/obtener-encuestas', {
+        const response = await fetch('/api/encuestas_new/obtener-encuestas', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -247,7 +255,7 @@ cargarEncuestas();
 async function eliminarEncuesta(id) {
     if (confirm('¿Estás seguro de que deseas eliminar esta encuesta?')) {
         try {
-            const response = await fetch(`http://148.204.142.3:3002/api/encuestas_new/eliminarEncuesta/${id}`, {
+            const response = await fetch(`/api/encuestas_new/eliminarEncuesta/${id}`, {
                 method: 'DELETE'
             });
 
@@ -310,6 +318,192 @@ function renderizarEncuestas(encuestas) {
         tbody.appendChild(fila);
     });
 }
+async function editarEncuesta(idEncuesta) {
+    try {
+        reiniciarModal();
+        // Obtener los datos de la encuesta desde el backend
+        const response = await fetch(`/api/encuestas_new/editar/${idEncuesta}`);
+        if (!response.ok) throw new Error('Error al obtener los datos de la encuesta.');
+        const encuesta = await response.json();
+
+        // Llenar el modal con los datos de la encuesta
+        document.getElementById('titulo_modal').innerText = "Editar Encuesta";
+        document.getElementById('nombre_encuesta').value = encuesta.nombre;
+        console.log("nombre de la encuesta ", encuesta.nombre)
+        document.getElementById('descripcion').value = encuesta.descripcion;
+        // Mostrar el botón
+    document.getElementById('guardar-cambios_ed').style.display = 'block';
+    document.getElementById('guardarEncuestaButton').style.display = 'none';
+
+        // Limpiar el contenedor de preguntas
+        const preguntasContainer = document.getElementById('preguntas-container');
+        preguntasContainer.innerHTML = '';
+
+        // Cargar preguntas en el modal
+        encuesta.preguntas.forEach((pregunta, index) => {
+            const preguntaId = index + 1;
+            nuevaPregunta(); // Usar la función existente para agregar bloques de preguntas
+
+            // Rellenar datos de cada pregunta
+            const preguntaDiv = document.getElementById(`pregunta-${preguntaId}`);
+            preguntaDiv.querySelector('input[type="text"]').value = pregunta.texto;
+            preguntaDiv.querySelector('.tipo-pregunta').value = pregunta.tipo;
+
+            if (pregunta.tipo === 'opcion-multiple') {
+                const opcionesContainer = preguntaDiv.querySelector('.opciones-container');
+            
+                // Asegúrate de que exista el contenedor de incisos
+                if (!document.getElementById(`incisos-container-${preguntaId}`)) {
+                    const incisosContainer = document.createElement('div');
+                    incisosContainer.id = `incisos-container-${preguntaId}`;
+                    opcionesContainer.appendChild(incisosContainer);
+                }
+            
+                const incisosContainer = document.getElementById(`incisos-container-${preguntaId}`);
+            
+                // Agregar los incisos
+                pregunta.opciones.forEach((opcion, opcionIndex) => {
+                    agregarInciso(preguntaId); // Usar la función para agregar opciones dinámicamente
+                    const opcionInput = incisosContainer.querySelectorAll('input[type="text"]')[opcionIndex];
+                    opcionInput.value = opcion;
+                });
+            }
+            
+        });
+
+        // Cambiar el comportamiento del botón "Guardar cambios"
+        const guardarBtn = document.getElementById('guardar-cambios_ed');
+        guardarBtn.onclick = () => guardarEncuestaEd(idEncuesta);
+        //Limpiar al cancelar
+        const cancelarBtn = document.getElementById('cancelarBtn');
+        cancelarBtn.onclick = () => {
+            document.getElementById('nombre_encuesta').value = "";
+            document.getElementById('descripcion').value = "";
+            document.getElementById('preguntas-container').innerHTML = "";
+            document.getElementById('titulo_modal').innerText = "Nueva Encuesta"; 
+        };
+        
+        // Abrir el modal
+        $('#modal_create_form').modal('show');
+        $('#modal_create_form').on('hidden.bs.modal', function () {
+            // Limpia el contenido del modal al cerrarlo
+            document.getElementById('nombre_encuesta').value = '';
+            document.getElementById('descripcion').value = '';
+            document.getElementById('preguntas-container').innerHTML = '';
+            // Ocultar el botón
+            document.getElementById('guardar-cambios_ed').style.display = 'none';
+            document.getElementById('guardarEncuestaButton').style.display = 'block';
+            reiniciarModal();   
+        });
+    } catch (error) {
+        console.error('Error al cargar los datos de la encuesta:', error);
+        alert('Hubo un error al cargar los datos de la encuesta.');
+    }
+}
+
+
+async function guardarEncuestaEd(idEncuesta) {
+    try {
+        // Obtener los datos del formulario
+        const nombre = document.getElementById('nombre_encuesta').value.trim();
+        const descripcion = document.getElementById('descripcion').value.trim();
+        const preguntasContainer = document.getElementById('preguntas-container');
+        const preguntas = [];
+
+        if (!nombre) {
+            alert('El nombre de la encuesta es obligatorio.');
+            return;
+        }
+
+        // Procesar preguntas
+        preguntasContainer.querySelectorAll('.pregunta').forEach((preguntaDiv, index) => {
+            const texto = preguntaDiv.querySelector('input[type="text"]').value.trim();
+            const tipo = preguntaDiv.querySelector('.tipo-pregunta').value;
+
+            if (!texto) {
+                alert(`La pregunta ${index + 1} está vacía. Por favor, completa todos los campos.`);
+                throw new Error(`Pregunta ${index + 1} vacía.`);
+            }
+
+            const pregunta = { texto, tipo };
+
+            if (tipo === 'opcion-multiple') {
+                const opciones = Array.from(
+                    preguntaDiv.querySelectorAll('.inciso input[type="text"]')
+                ).map(opcionInput => opcionInput.value.trim());
+
+                if (opciones.length === 0 || opciones.some(opcion => opcion === '')) {
+                    alert(`Una o más opciones están vacías en la pregunta ${index + 1}.`);
+                    throw new Error(`Opciones vacías en la pregunta ${index + 1}.`);
+                }
+
+                pregunta.opciones = opciones;
+            }
+
+            preguntas.push(pregunta);
+        });
+
+        // Crear payload
+        const payload = { nombre, descripcion, preguntas };
+
+        // Indicador de carga
+        const guardarBtn = document.getElementById('guardar-cambios_ed');
+        guardarBtn.disabled = true;
+        guardarBtn.textContent = 'Guardando...';
+
+        // Enviar al backend
+        const response = await fetch(`/api/encuestas_new/actualizarEncuesta/${idEncuesta}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        guardarBtn.disabled = false;
+        guardarBtn.textContent = 'Guardar Cambios';
+
+        if (!response.ok) throw new Error('Error al actualizar la encuesta.');
+        
+        alert('Encuesta actualizada correctamente.');
+        await cargarEncuestas();
+        // Opcional: Cierra el modal tras el éxito
+        $('#modal_create_form').modal('hide');
+        $('#modal_create_form').on('hidden.bs.modal', function () {
+            // Limpia el contenido del modal al cerrarlo
+            document.getElementById('nombre_encuesta').value = '';
+            document.getElementById('descripcion').value = '';
+            document.getElementById('preguntas-container').innerHTML = '';
+        });
+        
+    } catch (error) {
+        console.error('Error al guardar encuesta:', error);
+        alert('Hubo un error al guardar los cambios. Verifica los campos e inténtalo de nuevo.');
+        
+        // Rehabilitar el botón en caso de error
+        const guardarBtn = document.getElementById('guardar-cambios_ed');
+        guardarBtn.disabled = false;
+        guardarBtn.textContent = 'Guardar Cambios';
+    }
+}
+function reiniciarModal() {
+    // Restablecer título del modal
+    document.getElementById('titulo_modal').innerText = "Nueva Encuesta";
+
+    // Limpiar el formulario
+    document.getElementById('nombre_encuesta').value = '';
+    document.getElementById('descripcion').value = '';
+
+    // Limpiar el contenedor de preguntas
+    const preguntasContainer = document.getElementById('preguntas-container');
+    preguntasContainer.innerHTML = '';
+
+    // Reiniciar el contador global de preguntas
+    contadorPreguntas = 0;
+
+    // Opcional: Restablecer otros estados globales (si los tienes)
+}
+
 
 // Llamar a la función para cargar las encuestas cuando la página esté lista
 document.addEventListener('DOMContentLoaded', cargarEncuestas);
