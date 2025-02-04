@@ -299,7 +299,11 @@ function renderizarEncuestas(encuestas) {
         botonVer.onclick = () => {
             window.location.href = `/resultados/${encuesta._id}`;
         };
-
+        const botonDescargar = document.createElement('button');
+        botonDescargar.textContent = 'Descargar';
+        botonDescargar.classList.add('btn', 'btn-success', 'mr-2');
+        botonDescargar.onclick = () => descargarRespuestas(encuesta._id);
+        
         const botonEditar = document.createElement('button');
         botonEditar.textContent = 'Editar';
         botonEditar.classList.add('btn', 'btn-warning', 'mr-2');
@@ -313,6 +317,7 @@ function renderizarEncuestas(encuestas) {
         
 
         celdaOpciones.appendChild(botonVer);
+        celdaOpciones.appendChild(botonDescargar);
         celdaOpciones.appendChild(botonEditar);
         celdaOpciones.appendChild(botonEliminar);
         fila.appendChild(celdaOpciones);
@@ -505,6 +510,47 @@ function reiniciarModal() {
     contadorPreguntas = 0;
 
     // Opcional: Restablecer otros estados globales (si los tienes)
+}
+
+async function descargarRespuestas(idEncuesta) {
+    try {
+        const response = await fetch(`/api/respuestas/${idEncuesta}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+
+        const data = await response.json();
+
+        if (!data.respuestas || data.respuestas.length === 0) {
+            alert("No hay respuestas para esta encuesta.");
+            return;
+        }
+
+        // Estructurar datos para Excel
+        const respuestasParaExcel = data.respuestas.map((item, index) => {
+            return {
+                "Pregunta": item.pregunta,
+                "Tipo": item.tipo,
+                "Opciones": item.opciones ? item.opciones.join(", ") : "N/A",
+                "Respuestas": item.respuestas.join(", ")
+            };
+        });
+
+        // Crear una hoja de trabajo (worksheet)
+        const ws = XLSX.utils.json_to_sheet(respuestasParaExcel);
+
+        // Crear un libro de trabajo (workbook)
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Respuestas");
+
+        // Descargar el archivo
+        XLSX.writeFile(wb, `Respuestas_Encuesta_${idEncuesta}.xlsx`);
+        
+    } catch (error) {
+        console.error("Error al descargar respuestas:", error);
+        alert("Hubo un error al generar el archivo.");
+    }
 }
 
 
