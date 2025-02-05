@@ -39,7 +39,7 @@ module.exports = function(dbinyectada) {
                 encuestas.map(async (encuesta) => {
                     // Verifica y convierte `fecha_aplicacion` si está en formato DD-MM-YYYY
                     if (typeof encuesta.fecha_aplicacion === 'string') {
-                        encuesta.fecha_aplicacion = moment(encuesta.fecha_aplicacion, "DD-MM-YYYY").toDate();
+                        encuesta.fecha_aplicacion = moment(encuesta.fecha_aplicacion, "DD-MM-YYYY HH:mm:ss").toDate();
                     }
     
                     // Inserta cada encuesta en la base de datos
