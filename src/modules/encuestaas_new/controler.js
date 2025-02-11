@@ -1,5 +1,6 @@
 const Encuesta = require('../../models/encuestas')
-
+const EncuestaAplicada = require('../../models/respuestas');
+const Encuestador = require('../../models/encModel');
 const obtenerEncuestas = async (req, res) => {
     try {
         
@@ -119,11 +120,108 @@ async function obtenerEncuestaPorId(req, res) {
     }
 };
 
+
+async function descargarEncuesta (req, res) {
+    try {
+        const { id } = req.params;
+
+        // Obtener la encuesta por ID
+        const encuesta = await Encuesta.findById(id);
+        if (!encuesta) {
+            return res.status(404).json({ message: 'Encuesta no encontrada' });
+        }
+
+        const preguntas = encuesta.preguntas;
+
+        // Obtener las respuestas asociadas y poblar los encuestadores
+        const respuestasAplicadas = await EncuestaAplicada.find({ id_encuesta: id }).populate('id_encuestador');
+
+        if (respuestasAplicadas.length === 0) {
+            return res.status(404).json({ message: 'No hay respuestas para esta encuesta' });
+        }
+
+        // Asociar preguntas con sus respuestas e incluir la matrícula del encuestador en cada respuesta
+        const detalleRespuestas = preguntas.map(pregunta => {
+            const respuestasParaPregunta = respuestasAplicadas.flatMap(encuestaAplicada =>
+                encuestaAplicada.respuestas
+                    .filter(r => r.id_pregunta.equals(pregunta._id))
+                    .map(r => ({
+                        respuesta: r.respuesta,
+                        matricula: encuestaAplicada.id_encuestador.matricula || "Desconocido",
+                        id_encuesta_aplicada: encuestaAplicada.id,
+                        fecha_aplicacion: encuestaAplicada.fecha_aplicacion.toISOString().substring(0, 10),
+                        hora_aplicacion: encuestaAplicada.fecha_aplicacion.toISOString().substring(11, 19)
+                    }))
+            );
+
+            return {
+                pregunta: pregunta.texto,
+                tipo: pregunta.tipo,
+                opciones: pregunta.opciones || [],
+                respuestas: respuestasParaPregunta, // Ahora cada respuesta tiene la matrícula del encuestador
+            };
+        });
+
+        res.status(200).json({
+            nombre: encuesta.nombre,
+            descripcion: encuesta.descripcion,
+            respuestas: detalleRespuestas, // Cada respuesta ahora tiene una matrícula asociada
+        });
+
+    } catch (error) {
+        console.error('Error al obtener las respuestas:', error);
+        res.status(500).json({ message: 'Error al obtener las respuestas' });
+    }
+};
+
+async function verEncuesta (req, res)  {
+    try {
+        const { id } = req.params;
+
+        // Obtener la encuesta por ID
+        const encuesta = await Encuesta.findById(id);
+        if (!encuesta) {
+            return res.status(404).json({ message: 'Encuesta no encontrada' });
+        }
+
+        const preguntas = encuesta.preguntas;
+
+        // Obtener las respuestas asociadas
+        const respuestasAplicadas = await EncuestaAplicada.find({ id_encuesta: id });
+
+        // Asociar preguntas con sus respuestas
+        const detalleRespuestas = preguntas.map(pregunta => {
+            const respuestasParaPregunta = respuestasAplicadas.flatMap(encuestaAplicada =>
+                encuestaAplicada.respuestas.filter(r => r.id_pregunta.equals(pregunta._id))
+            );
+        
+            return {
+                pregunta: pregunta.texto,
+                tipo: pregunta.tipo, // Incluir el tipo de la pregunta
+                opciones: pregunta.opciones || [], // Incluir las opciones si existen (para preguntas de opción múltiple)
+                respuestas: respuestasParaPregunta.map(r => r.respuesta),
+            };
+        });
+        
+
+        res.status(200).json({
+            nombre: encuesta.nombre,
+            descripcion: encuesta.descripcion,
+            respuestas: detalleRespuestas,
+        });
+    } catch (error) {
+        console.error('Error al obtener las respuestas:', error);
+        res.status(500).json({ message: 'Error al obtener las respuestas' });
+    }
+};
+
 module.exports = {
     obtenerEncuestas,
     crearEncuesta,
     obtenerEncuesta,
     actualizarEncuesta,
     eliminarEncuesta,
-    obtenerEncuestaPorId
+    obtenerEncuestaPorId,
+    descargarEncuesta, 
+    verEncuesta
 };
