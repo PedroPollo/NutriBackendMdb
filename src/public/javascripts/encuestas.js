@@ -294,7 +294,7 @@ function renderizarEncuestas(encuestas) {
         const celdaOpciones = document.createElement('td');
 
         const botonVer = document.createElement('button');
-        botonVer.textContent = 'Ver';
+        botonVer.textContent = 'Resumen';
         botonVer.classList.add('btn', 'btn-primary', 'mr-2');
         botonVer.onclick = () => {
             window.location.href = `/resultados/${encuesta._id}`;
@@ -514,7 +514,7 @@ function reiniciarModal() {
 
 async function descargarRespuestas(idEncuesta) {
     try {
-        const response = await fetch(`/api/respuestas/${idEncuesta}`, {
+        const response = await fetch(`/api/respuestas/descargar/${idEncuesta}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -522,37 +522,68 @@ async function descargarRespuestas(idEncuesta) {
 
         const data = await response.json();
 
-        if (!data.respuestas || data.respuestas.length === 0) {
-            alert("No hay respuestas para esta encuesta.");
+        if (data.message) {
+            alert(data.message);
             return;
         }
 
-        // Estructurar datos para Excel
-        const respuestasParaExcel = data.respuestas.map((item, index) => {
-            return {
-                "Pregunta": item.pregunta,
-                "Tipo": item.tipo,
-                "Opciones": item.opciones ? item.opciones.join(", ") : "N/A",
-                "Respuestas": item.respuestas.join(", ")
-            };
+        const { nombre, respuestas } = data;
+
+        // Obtener todas las preguntas únicas en orden
+        const preguntas = [...new Set(respuestas.map(r => r.pregunta))];
+
+        // Construcción de la hoja de Excel
+        const wsData = [];
+        
+        // Encabezados (Primera fila)
+        wsData.push(["Folio", "Matrícula", "Fecha", "Hora", ...preguntas]);
+
+        // Objeto para organizar respuestas por encuesta aplicada
+        const encuestasMap = new Map();
+        let folio=1;
+        respuestas.forEach(({ pregunta, respuestas }) => {
+            respuestas.forEach(({ respuesta, matricula, fecha_aplicacion, hora_aplicacion, id_encuesta_aplicada}) => {  
+                // Si la encuesta aplicada no está en el mapa, la inicializamos
+                if (!encuestasMap.has(id_encuesta_aplicada)) {
+                    encuestasMap.set(id_encuesta_aplicada, {
+                        folio,
+                        matricula,
+                        fecha_aplicacion,
+                        hora_aplicacion,
+                        respuestas: {} // Almacenar respuestas de cada pregunta
+                    });
+                }
+
+                // Agregamos la respuesta en la pregunta correcta
+                encuestasMap.get(id_encuesta_aplicada).respuestas[pregunta] = respuesta;
+                folio++ ;
+            });
+        });
+        // Construcción de filas ordenadas (todas las encuestas aplicadas)
+        encuestasMap.forEach(({ folio, matricula, fecha_aplicacion, hora_aplicacion, respuestas }) => {
+            const fila = [
+                folio,
+                matricula,
+                fecha_aplicacion,
+                hora_aplicacion,
+                ...preguntas.map(pregunta => respuestas[pregunta] || ""), // Rellena con "" si no hay respuesta
+            ];
+            wsData.push(fila);
         });
 
-        // Crear una hoja de trabajo (worksheet)
-        const ws = XLSX.utils.json_to_sheet(respuestasParaExcel);
-
-        // Crear un libro de trabajo (workbook)
+        // Crear hoja de cálculo
         const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
         XLSX.utils.book_append_sheet(wb, ws, "Respuestas");
 
-        // Descargar el archivo
-        XLSX.writeFile(wb, `Respuestas_Encuesta_${idEncuesta}.xlsx`);
-        
+        // Guardar archivo con el nombre de la encuesta
+        const nombreArchivo = `Respuestas_${nombre.replace(/\s+/g, "_")}.xlsx`;
+        XLSX.writeFile(wb, nombreArchivo);
+
     } catch (error) {
-        console.error("Error al descargar respuestas:", error);
-        alert("Hubo un error al generar el archivo.");
+        console.error("Error al generar el Excel:", error);
     }
 }
-
 
 // Llamar a la función para cargar las encuestas cuando la página esté lista
 document.addEventListener('DOMContentLoaded', cargarEncuestas);
