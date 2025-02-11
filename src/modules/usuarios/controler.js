@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'nutricion_UAZ';
 const registrarUsuario = async (req, res) => {
     try {
-        const { nom_usuario, apellidos_usuario, identificador, correo_ins, correo_alter, contr, contr_2 } = req.body;
+        const { nom_usuario, apellidos_usuario, identificador, correo_ins, contr, contr_2 } = req.body;
 
         // Validar contraseñas
         if (contr !== contr_2) {
@@ -21,7 +21,6 @@ const registrarUsuario = async (req, res) => {
             apellidos_usuario,
             identificador,
             correo_ins,
-            correo_alter,
             contr: hashedPassword
         });
 
