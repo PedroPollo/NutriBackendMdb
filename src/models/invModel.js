@@ -19,11 +19,6 @@ const invSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    correo_alter: {
-        type: String,
-        required: true,
-        unique: true
-    },
     contr: {
         type: String,
         required: true,
