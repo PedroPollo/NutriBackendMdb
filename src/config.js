@@ -8,6 +8,6 @@ module.exports = {
         secret: process.env.JET_SECRET || 'notaSecreta!'
     },
     mongo: {
-        db: process.env.MONGODB || 'mongodb+srv://read-write:nutripob@cluster0.aacbi.mongodb.net/nutri?retryWrites=true&w=majorityc',
+        db: process.env.MONGODB || 'mongodb://127.0.0.1:27017/nutri',
     }
 }

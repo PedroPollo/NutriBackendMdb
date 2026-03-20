@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
-    "prod": "nohup node index.js > salida.log 2>&1 &"
+    "prod": "pm2 start index.js --name NutriPoblacional"
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +21,6 @@
     "morgan": "^1.10.0",
     "nodemon": "^3.1.7"
   },
-  "devDependencies": {},
   "keywords": [],
   "description": "NutriPoblacional es un proyecto diseñado para la unidad academica de nutricion de la Univesidad Autonoma de Zacatecas (UAZ)."
 }
